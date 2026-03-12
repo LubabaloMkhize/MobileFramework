@@ -34,10 +34,10 @@ public class LoginScreen {
         PageFactory.initElements(driver, this);
     }
 
-    public WebElement getLoginTitleText() {
+    public String getLoginTitleText() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         wait.until(ExpectedConditions.visibilityOf(loginTitle_xpath));
-        return loginTitle_xpath;
+        return loginTitle_xpath.getText();
     }
 
     public void enterUsername(String username){

@@ -4,6 +4,10 @@ import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class HomeScreen {
     private AndroidDriver driver;
@@ -43,8 +47,10 @@ public class HomeScreen {
     public void clickHamburgerMenu() {
         hamburgerMenu_xpath.click();
     }
-    public WebElement getHomeTitleText() {
-        return homeTitle_xpath;
+    public String getHomeTitleText() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.visibilityOf(homeTitle_xpath));
+        return homeTitle_xpath.getText();
     }
     public void clickHomeButton() {
         homeButton_xpath.click();
