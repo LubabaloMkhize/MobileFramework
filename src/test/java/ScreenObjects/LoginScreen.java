@@ -1,9 +1,14 @@
 package ScreenObjects;
 
 import io.appium.java_client.android.AndroidDriver;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class LoginScreen {
 
@@ -30,12 +35,27 @@ public class LoginScreen {
     }
 
     public WebElement getLoginTitleText() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.visibilityOf(loginTitle_xpath));
         return loginTitle_xpath;
     }
 
-    public void Login(String username, String password){
+    public void enterUsername(String username){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.visibilityOf(username_xpath));
+        username_xpath.click();
         username_xpath.sendKeys(username);
+    }
+
+    public void enterPassword(String password){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.visibilityOf(password_xpath));
+        password_xpath.click();
         password_xpath.sendKeys(password);
+
+    }
+
+    public void clickLoginButton(){
         loginButton_xpath.click();
     }
 }
