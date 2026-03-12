@@ -2,6 +2,7 @@ package Utils;
 
 
 import ScreenObjects.HomeScreen;
+import ScreenObjects.LoginScreen;
 import io.appium.java_client.android.AndroidDriver;
 import io.cucumber.java.Scenario;
 import org.openqa.selenium.OutputType;
@@ -12,6 +13,7 @@ public class Base {
 
     public AndroidDriver driver;
     public HomeScreen homeScreen;
+    public LoginScreen loginScreen;
 
 
     public void initDriver() {
@@ -19,6 +21,7 @@ public class Base {
         AppiumDriverFactory.getInstanceOfAppiumFactory(appPath);
         this.driver = (AndroidDriver) AppiumDriverFactory.getDriver();
         homeScreen = new HomeScreen(driver);
+        loginScreen = new LoginScreen(driver);
 
         driver.terminateApp("com.ndosi.ndosi_flutter_app");
         driver.activateApp("com.ndosi.ndosi_flutter_app");
