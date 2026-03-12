@@ -50,7 +50,7 @@ public class HomeScreen {
     public String getHomeTitleText() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         wait.until(ExpectedConditions.visibilityOf(homeTitle_xpath));
-        return homeTitle_xpath.getText();
+        return homeTitle_xpath.getAttribute("content-desc");
     }
     public void clickHomeButton() {
         homeButton_xpath.click();

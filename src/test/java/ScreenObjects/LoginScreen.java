@@ -37,7 +37,7 @@ public class LoginScreen {
     public String getLoginTitleText() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         wait.until(ExpectedConditions.visibilityOf(loginTitle_xpath));
-        return loginTitle_xpath.getText();
+        return loginTitle_xpath.getAttribute("content-desc");
     }
 
     public void enterUsername(String username){

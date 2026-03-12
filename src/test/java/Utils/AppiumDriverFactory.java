@@ -14,8 +14,10 @@ public class AppiumDriverFactory {
     public AppiumDriverFactory(String appPath) {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability("app", appPath);
-        capabilities.setCapability("automationName", "UiAutomator2");
+        capabilities.setCapability("appium:automationName", "UiAutomator2");
+        capabilities.setCapability("appium:app", appPath);
+        capabilities.setCapability("appium:deviceName", "AndroidDevice");
+
 
         try {
             driver = new AndroidDriver(new URL("http://127.0.0.1:4723/"), capabilities);

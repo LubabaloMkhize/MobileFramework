@@ -9,14 +9,21 @@ import org.testng.Assert;
 public class LoginSteps extends Base {
     @Given("the user is on the login screen")
     public void the_user_is_on_the_login_screen() {
-        Assert.assertEquals(homeScreen.getHomeTitleText(), "Master Test Automation");
+        initDriver();
+
+        String actualText = homeScreen.getHomeTitleText();
+        Assert.assertEquals(actualText, "Master Test Automation");
+
         TakeScreenshots.takesSnapShot(driver, "Home Screen");
+
         homeScreen.clickHamburgerMenu();
         homeScreen.clickLoginButton();
     }
     @When("the user enters username {string}")
     public void the_user_enters_username(String username) {
-        Assert.assertEquals(homeScreen.getHomeTitleText(), "Login to Access Learning Materials");
+        String actualText = loginScreen.getLoginTitleText();
+        Assert.assertEquals(actualText, "Login to Access Learning Materials");
+
         TakeScreenshots.takesSnapShot(driver, "Login Screen");
         loginScreen.enterUsername(username);
     }
