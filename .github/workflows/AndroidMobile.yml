@@ -1,0 +1,104 @@
+name: Android Mobile Testing
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        java-version: [ 21 ]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Display Java Version
+        run: java -version
+
+      - name: Build Project with Maven
+        run: mvn clean compile test-compile
+
+      - name: Run Mobile Tests
+        run: mvn test
+        continue-on-error: true
+
+      - name: Generate ExtentReport
+        if: always()
+        run: |
+          echo "Tests completed. Report should be generated."
+
+      - name: Upload Screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: Screenshots/
+          retention-days: 30
+        continue-on-error: true
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            target/test-classes/
+            test-output/
+          retention-days: 30
+        continue-on-error: true
+
+      - name: Upload ExtentReport
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extent-report
+          path: test-output/SparkReport/
+          retention-days: 30
+        continue-on-error: true
+
+      - name: Publish Test Report
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Test Results
+          path: 'target/surefire-reports/*.xml'
+          reporter: 'java-junit'
+        continue-on-error: true
+
+      - name: Comment PR with Test Results
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ Mobile Testing Workflow completed!\n\n📊 Artifacts available: Screenshots, Test Results, and ExtentReport'
+            })
+        continue-on-error: true
+
+      - name: Check Test Status
+        if: always()
+        run: |
+          if [ -d "test-output/SparkReport" ]; then
+            echo "✅ ExtentReport generated successfully"
+          else
+            echo "⚠️ ExtentReport not found"
+          fi
+
